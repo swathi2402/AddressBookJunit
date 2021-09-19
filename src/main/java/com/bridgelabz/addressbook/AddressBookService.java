@@ -19,4 +19,11 @@ public class AddressBookService {
 			new AdressBookFileIOService().writeData(addressBookList, name);
 		}
 	}
+
+	public long countEntries(I0Service ioservice, String name) {
+		if (ioservice.equals(I0Service.FILE_I0)) {
+			return new AdressBookFileIOService().countEntries(name);
+		}
+		return 0;
+	}
 }

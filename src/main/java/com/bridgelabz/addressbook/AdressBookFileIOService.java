@@ -1,5 +1,6 @@
 package com.bridgelabz.addressbook;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -19,5 +20,15 @@ public class AdressBookFileIOService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public long countEntries(String name) {
+		long enteries = 0;
+		try {
+			enteries = Files.lines(new File(name).toPath()).count();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return enteries;
 	}
 }
