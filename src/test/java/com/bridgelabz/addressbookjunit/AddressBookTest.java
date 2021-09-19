@@ -1,10 +1,13 @@
-package com.bridgelabz.addressbook;
+package com.bridgelabz.addressbookjunit;
 
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 
 import org.junit.Test;
+
+import com.bridgelabz.addressbook.Contact;
+import com.bridgelabz.addressbookjunit.AddressBookService;
 
 public class AddressBookTest {
 

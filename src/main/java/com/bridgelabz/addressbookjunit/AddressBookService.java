@@ -1,6 +1,8 @@
-package com.bridgelabz.addressbook;
+package com.bridgelabz.addressbookjunit;
 
 import java.util.List;
+
+import com.bridgelabz.addressbook.Contact;
 
 public class AddressBookService {
 
