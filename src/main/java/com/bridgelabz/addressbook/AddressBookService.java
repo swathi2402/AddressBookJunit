@@ -9,6 +9,10 @@ public class AddressBookService {
 	}
 
 	private List<Contact> addressBookList;
+	
+	public AddressBookService() {
+		
+	}
 
 	public AddressBookService(List<Contact> addressBookList) {
 		this.addressBookList = addressBookList;
@@ -18,6 +22,15 @@ public class AddressBookService {
 		if (ioservice.equals(I0Service.FILE_I0)) {
 			new AdressBookFileIOService().writeData(addressBookList, name);
 		}
+	}
+
+	public long readData(I0Service ioservice, String name) {
+		if (ioservice.equals(I0Service.FILE_I0)) {
+			this.addressBookList = new AdressBookFileIOService().readData(name);
+			System.out.println("Contact Details: ");
+			this.addressBookList.forEach(contact -> System.out.println(contact));
+		}
+		return this.addressBookList.size();
 	}
 
 	public long countEntries(I0Service ioservice, String name) {

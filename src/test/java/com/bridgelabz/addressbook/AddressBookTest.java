@@ -7,6 +7,7 @@ import java.util.Arrays;
 import org.junit.Test;
 
 public class AddressBookTest {
+
 	@Test
 	public void givenContactWriteToTheFile() {
 		Contact[] contacts = {
@@ -18,6 +19,13 @@ public class AddressBookTest {
 		addressBookService = new AddressBookService(Arrays.asList(contacts));
 		addressBookService.writeData(AddressBookService.I0Service.FILE_I0, "Addressbook");
 		long entries = addressBookService.countEntries(AddressBookService.I0Service.FILE_I0, "Addressbook");
+		assertEquals(3, entries);
+	}
+
+	@Test
+	public void givenFileOnReadingFromFileShouldMatchEContactCount() {
+		AddressBookService addressBookService = new AddressBookService();
+		long entries = addressBookService.readData(AddressBookService.I0Service.FILE_I0, "Addressbook");
 		assertEquals(3, entries);
 	}
 }
