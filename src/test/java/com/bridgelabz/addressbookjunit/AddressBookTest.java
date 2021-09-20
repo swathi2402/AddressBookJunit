@@ -11,6 +11,7 @@ import com.bridgelabz.addressbook.Contact;
 import com.bridgelabz.addressbook.ContactOperationsIF;
 import com.bridgelabz.addressbook.ContactOperationsImpl;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 
 public class AddressBookTest {
@@ -47,5 +48,11 @@ public class AddressBookTest {
 	public void givenContactDetails_AbilityToCreateCSVFile() throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException {
 		AddressBookCSVReadWrite addressBookCSVReadWrite = new AddressBookCSVReadWrite();
 		addressBookCSVReadWrite.writeToCSV("addressbook");
+	}
+	
+	@Test
+	public void givenCSVFile_AbilityToReadCSVFile() throws IOException, CsvException {
+		AddressBookCSVReadWrite addressBookCSVReadWrite = new AddressBookCSVReadWrite();
+		addressBookCSVReadWrite.readFromCSV("addressbook");
 	}
 }
