@@ -36,23 +36,30 @@ public class AddressBookTest {
 		long entries = contactOperations.readData(ContactOperationsImpl.I0Service.FILE_I0, "Addressbook");
 		assertEquals(3, entries);
 	}
-	
+
 	@Test
 	public void addContactThroughConsole() {
 		ContactOperationsIF contactOperations = new ContactOperationsImpl();
 		contactOperations.addAddressBook("Addressbook");
 		contactOperations.addContact(ContactOperationsImpl.I0Service.CONSOLE_IO, "Addressbook");
 	}
-	
+
 	@Test
-	public void givenContactDetails_AbilityToCreateCSVFile() throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException {
+	public void givenContactDetails_AbilityToCreateCSVFile()
+			throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException {
 		AddressBookCSVReadWrite addressBookCSVReadWrite = new AddressBookCSVReadWrite();
 		addressBookCSVReadWrite.writeToCSV("addressbook");
 	}
-	
+
 	@Test
 	public void givenCSVFile_AbilityToReadCSVFile() throws IOException, CsvException {
 		AddressBookCSVReadWrite addressBookCSVReadWrite = new AddressBookCSVReadWrite();
 		addressBookCSVReadWrite.readFromCSV("addressbook");
+	}
+
+	@Test
+	public void givenContactDetailsOfCSVFile_AbilityToCreateJsonFile() {
+		AddressBookJson addressBookJson = new AddressBookJson();
+		addressBookJson.writeToJson("addressbook");
 	}
 }
