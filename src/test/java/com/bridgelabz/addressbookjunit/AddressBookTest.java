@@ -1,8 +1,8 @@
 package com.bridgelabz.addressbookjunit;
 
 import static org.junit.Assert.assertEquals;
-//import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 import org.junit.Test;
@@ -10,6 +10,8 @@ import org.junit.Test;
 import com.bridgelabz.addressbook.Contact;
 import com.bridgelabz.addressbook.ContactOperationsIF;
 import com.bridgelabz.addressbook.ContactOperationsImpl;
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 
 public class AddressBookTest {
 
@@ -39,5 +41,11 @@ public class AddressBookTest {
 		ContactOperationsIF contactOperations = new ContactOperationsImpl();
 		contactOperations.addAddressBook("Addressbook");
 		contactOperations.addContact(ContactOperationsImpl.I0Service.CONSOLE_IO, "Addressbook");
+	}
+	
+	@Test
+	public void givenContactDetails_AbilityToCreateCSVFile() throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException {
+		AddressBookCSVReadWrite addressBookCSVReadWrite = new AddressBookCSVReadWrite();
+		addressBookCSVReadWrite.writeToCSV("addressbook");
 	}
 }
