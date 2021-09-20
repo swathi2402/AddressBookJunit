@@ -8,6 +8,9 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+import com.bridgelabz.addressbookjunit.AddressBookService.I0Service;
+
+
 public class ContactOperationsImpl implements ContactOperationsIF {
 
 	Scanner scanner = new Scanner(System.in);
@@ -24,10 +27,8 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 			addressBook.put(addressBookName, new ArrayList<Contact>());
 		}
 	}
-
-	@Override
-	public void addContact(String addressBookName) {
-
+	
+	public Contact createContact() {
 		System.out.println(
 				"Enter details in the order First Name, Lsat Name, Address, City, State, Pincode, Phone Number, Email Address");
 
@@ -40,33 +41,41 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 		String phoneNumber = scanner.nextLine();
 		String email = scanner.nextLine();
 
-		boolean isPresent = false;
+		Contact newContact = new Contact(firstName, lastName, address, city, state, ZIP, phoneNumber, email);
+		return newContact;
+	}
 
+	@Override
+	public boolean addContact(I0Service ioservice, String addressBookName) {
+
+		Contact newContact = createContact();
+
+		boolean isPresent = false;
+		boolean isAdded = false;
 		for (int index = 0; index < addressBook.get(addressBookName).size(); index++) {
-			if (firstName.equals(addressBook.get(addressBookName).get(index).getFirstName())) {
-				System.out.println("Contact for " + firstName + " " + " is already exists");
+			if (newContact.getFirstName().equals(addressBook.get(addressBookName).get(index).getFirstName())) {
+				System.out.println("Contact for " + newContact.getFirstName() + " " + " is already exists");
 				isPresent = true;
 				break;
 			}
 		}
 
 		if (!isPresent) {
-			Contact newContact = new Contact(firstName, lastName, address, city, state, ZIP, phoneNumber, email);
-			addressBook.get(addressBookName).add(newContact);
-			System.out.println("Contact for " + firstName + " " + lastName + " is added");
+			isAdded = addressBook.get(addressBookName).add(newContact);
+			System.out.println("Contact for " + newContact.getFirstName() + " " + newContact.getLastName() + " is added");
 
-			if (personsInCity.get(city) == null) {
-				personsInCity.put(city, new ArrayList<Contact>());
+			if (personsInCity.get(newContact.getCity()) == null) {
+				personsInCity.put(newContact.getCity(), new ArrayList<Contact>());
 			}
-			personsInCity.get(city).add(newContact);
+			personsInCity.get(newContact.getCity()).add(newContact);
 
-			if (personsInState.get(state) == null) {
-				personsInState.put(state, new ArrayList<Contact>());
+			if (personsInState.get(newContact.getState()) == null) {
+				personsInState.put(newContact.getState(), new ArrayList<Contact>());
 			}
-			personsInState.get(state).add(newContact);
+			personsInState.get(newContact.getState()).add(newContact);
 
 		}
-
+		return isAdded;
 	}
 
 	@Override
@@ -236,4 +245,6 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 		System.out.println("Persons in the State " + nameOfState + " in sorted order: ");
 		sortedStateList.stream().forEach(n -> System.out.println(n.getFirstName() + " " + n.getLastName()));
 	}
+
+	
 }

@@ -1,10 +1,12 @@
 package com.bridgelabz.addressbook;
 
+import com.bridgelabz.addressbookjunit.AddressBookService.I0Service;
+
 public interface ContactOperationsIF {
 
 	public void addAddressBook(String addressBookName);
 
-	public void addContact(String addressBookName);
+	public boolean addContact(I0Service ioservice, String addressBookName);
 
 	public void checkToEdit(String addressBookName);
 

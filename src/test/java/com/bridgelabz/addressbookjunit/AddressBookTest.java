@@ -1,12 +1,15 @@
 package com.bridgelabz.addressbookjunit;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 
 import org.junit.Test;
 
 import com.bridgelabz.addressbook.Contact;
+import com.bridgelabz.addressbook.ContactOperationsIF;
+import com.bridgelabz.addressbook.ContactOperationsImpl;
 import com.bridgelabz.addressbookjunit.AddressBookService;
 
 public class AddressBookTest {
@@ -30,5 +33,13 @@ public class AddressBookTest {
 		AddressBookService addressBookService = new AddressBookService();
 		long entries = addressBookService.readData(AddressBookService.I0Service.FILE_I0, "Addressbook");
 		assertEquals(3, entries);
+	}
+	
+	@Test
+	public void addContactThroughConsole() {
+		ContactOperationsIF contactOperations = new ContactOperationsImpl();
+		contactOperations.addAddressBook("Addressbook");
+		boolean isAdded = contactOperations.addContact(AddressBookService.I0Service.CONSOLE_IO, "Addressbook");
+		assertTrue(isAdded);
 	}
 }

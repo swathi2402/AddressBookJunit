@@ -2,6 +2,8 @@ package com.bridgelabz.addressbook;
 
 import java.util.Scanner;
 
+import com.bridgelabz.addressbookjunit.AddressBookService.I0Service;
+
 public class AddressBookMain {
 
 	public static void main(String[] args) {
@@ -30,7 +32,7 @@ public class AddressBookMain {
 
 					switch (optionSelected) {
 					case 1:
-						contactOperations.addContact(addressBookName);
+						contactOperations.addContact(I0Service.CONSOLE_IO, addressBookName);
 						break;
 					case 2:
 						contactOperations.checkToEdit(addressBookName);
