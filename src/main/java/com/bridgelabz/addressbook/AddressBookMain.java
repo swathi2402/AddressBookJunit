@@ -2,7 +2,8 @@ package com.bridgelabz.addressbook;
 
 import java.util.Scanner;
 
-import com.bridgelabz.addressbookjunit.AddressBookService.I0Service;
+import com.bridgelabz.addressbook.ContactOperationsImpl.I0Service;
+
 
 public class AddressBookMain {
 

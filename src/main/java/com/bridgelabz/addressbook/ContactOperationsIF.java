@@ -1,12 +1,12 @@
 package com.bridgelabz.addressbook;
 
-import com.bridgelabz.addressbookjunit.AddressBookService.I0Service;
+import com.bridgelabz.addressbook.ContactOperationsImpl.I0Service;
 
 public interface ContactOperationsIF {
 
 	public void addAddressBook(String addressBookName);
 
-	public boolean addContact(I0Service ioservice, String addressBookName);
+	public void addContact(I0Service ioservice, String addressBookName);
 
 	public void checkToEdit(String addressBookName);
 
@@ -27,5 +27,10 @@ public interface ContactOperationsIF {
 	public void sortByCity(String nameOfCity);
 
 	public void sortByState(String nameOfState);
+	
+	public long readData(I0Service ioservice, String name);
+	
+	public long countEntries(I0Service ioservice, String name);
+
 
 }

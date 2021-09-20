@@ -8,10 +8,24 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-import com.bridgelabz.addressbookjunit.AddressBookService.I0Service;
-
+import com.bridgelabz.addressbookjunit.AdressBookFileIOService;
 
 public class ContactOperationsImpl implements ContactOperationsIF {
+
+	public enum I0Service {
+		CONSOLE_IO, FILE_I0, DB_I0, REST_I0
+	}
+
+	private List<Contact> addressBookList;
+
+	public ContactOperationsImpl() {
+
+	}
+
+	public ContactOperationsImpl(List<Contact> addressBookList) {
+		this.addressBookList = addressBookList;
+
+	}
 
 	Scanner scanner = new Scanner(System.in);
 	private Map<String, List<Contact>> addressBook = new HashMap<String, List<Contact>>();
@@ -27,7 +41,7 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 			addressBook.put(addressBookName, new ArrayList<Contact>());
 		}
 	}
-	
+
 	public Contact createContact() {
 		System.out.println(
 				"Enter details in the order First Name, Lsat Name, Address, City, State, Pincode, Phone Number, Email Address");
@@ -46,36 +60,40 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 	}
 
 	@Override
-	public boolean addContact(I0Service ioservice, String addressBookName) {
+	public void addContact(I0Service ioservice, String addressBookName) {
+		if (ioservice.equals(I0Service.FILE_I0)) {
+			new AdressBookFileIOService().writeData(addressBookList, addressBookName);
+			
+		} else if (ioservice.equals(I0Service.CONSOLE_IO)) {
 
-		Contact newContact = createContact();
+			Contact newContact = createContact();
 
-		boolean isPresent = false;
-		boolean isAdded = false;
-		for (int index = 0; index < addressBook.get(addressBookName).size(); index++) {
-			if (newContact.getFirstName().equals(addressBook.get(addressBookName).get(index).getFirstName())) {
-				System.out.println("Contact for " + newContact.getFirstName() + " " + " is already exists");
-				isPresent = true;
-				break;
+			boolean isPresent = false;
+			for (int index = 0; index < addressBook.get(addressBookName).size(); index++) {
+				if (newContact.getFirstName().equals(addressBook.get(addressBookName).get(index).getFirstName())) {
+					System.out.println("Contact for " + newContact.getFirstName() + " " + " is already exists");
+					isPresent = true;
+					break;
+				}
+			}
+
+			if (!isPresent) {
+				addressBook.get(addressBookName).add(newContact);
+				System.out.println(
+						"Contact for " + newContact.getFirstName() + " " + newContact.getLastName() + " is added");
+
+				if (personsInCity.get(newContact.getCity()) == null) {
+					personsInCity.put(newContact.getCity(), new ArrayList<Contact>());
+				}
+				personsInCity.get(newContact.getCity()).add(newContact);
+
+				if (personsInState.get(newContact.getState()) == null) {
+					personsInState.put(newContact.getState(), new ArrayList<Contact>());
+				}
+				personsInState.get(newContact.getState()).add(newContact);
+
 			}
 		}
-
-		if (!isPresent) {
-			isAdded = addressBook.get(addressBookName).add(newContact);
-			System.out.println("Contact for " + newContact.getFirstName() + " " + newContact.getLastName() + " is added");
-
-			if (personsInCity.get(newContact.getCity()) == null) {
-				personsInCity.put(newContact.getCity(), new ArrayList<Contact>());
-			}
-			personsInCity.get(newContact.getCity()).add(newContact);
-
-			if (personsInState.get(newContact.getState()) == null) {
-				personsInState.put(newContact.getState(), new ArrayList<Contact>());
-			}
-			personsInState.get(newContact.getState()).add(newContact);
-
-		}
-		return isAdded;
 	}
 
 	@Override
@@ -246,5 +264,20 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 		sortedStateList.stream().forEach(n -> System.out.println(n.getFirstName() + " " + n.getLastName()));
 	}
 
-	
+	public long countEntries(I0Service ioservice, String name) {
+		if (ioservice.equals(I0Service.FILE_I0)) {
+			return new AdressBookFileIOService().countEntries(name);
+		}
+		return 0;
+	}
+
+	public long readData(I0Service ioservice, String name) {
+		if (ioservice.equals(I0Service.FILE_I0)) {
+			this.addressBookList = new AdressBookFileIOService().readData(name);
+			System.out.println("Contact Details: ");
+			this.addressBookList.forEach(contact -> System.out.println(contact));
+		}
+		return this.addressBookList.size();
+	}
+
 }
