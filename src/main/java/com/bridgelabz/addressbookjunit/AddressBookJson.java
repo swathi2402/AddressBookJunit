@@ -30,16 +30,18 @@ public class AddressBookJson {
 			csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
 			CsvToBean<Contact> csvToBean = csvToBeanBuilder.build();
 			List<Contact> csvUsers = csvToBean.parse();
+			
 			Gson gson = new Gson();
 			String json = gson.toJson(csvUsers);
 			FileWriter writer = new FileWriter(JSON_PATH);
 			writer.write(json);
 			writer.close();
-			
+
 			BufferedReader br = new BufferedReader(new FileReader(JSON_PATH));
 			Contact[] usrObj = gson.fromJson(br, Contact[].class);
 			List<Contact> csvUserList = Arrays.asList(usrObj);
-			
+			System.out.println(csvUserList);
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
