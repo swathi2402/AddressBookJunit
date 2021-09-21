@@ -25,7 +25,7 @@ public class AddressBookTest {
 				new Contact("Xyz", "Abc", "Resdf", "Gfhuj", "Fdredf", "678678", "7890123456", "xyz@gmail.com") };
 		ContactOperationsIF contactOperations;
 		contactOperations = new ContactOperationsImpl(Arrays.asList(contacts));
-		contactOperations.addContact(ContactOperationsImpl.I0Service.FILE_I0, "Addressbook");
+		contactOperations.writeData(ContactOperationsImpl.I0Service.FILE_I0, "Addressbook");
 		long entries = contactOperations.countEntries(ContactOperationsImpl.I0Service.FILE_I0, "Addressbook");
 		assertEquals(3, entries);
 	}
@@ -41,14 +41,14 @@ public class AddressBookTest {
 	public void addContactThroughConsole() {
 		ContactOperationsIF contactOperations = new ContactOperationsImpl();
 		contactOperations.addAddressBook("Addressbook");
-		contactOperations.addContact(ContactOperationsImpl.I0Service.CONSOLE_IO, "Addressbook");
+		contactOperations.writeData(ContactOperationsImpl.I0Service.CONSOLE_IO, "Addressbook");
 	}
 
 	@Test
 	public void givenContactDetails_AbilityToCreateCSVFile()
 			throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException {
-		AddressBookCSVReadWrite addressBookCSVReadWrite = new AddressBookCSVReadWrite();
-		addressBookCSVReadWrite.writeToCSV("addressbook");
+		ContactOperationsIF contactOperations = new ContactOperationsImpl();
+		contactOperations.writeData(ContactOperationsImpl.I0Service.CSV_IO, "Addressbook");
 	}
 
 	@Test
@@ -59,7 +59,13 @@ public class AddressBookTest {
 
 	@Test
 	public void givenContactDetailsOfCSVFile_AbilityToCreateJsonFile() {
+		ContactOperationsIF contactOperations = new ContactOperationsImpl();
+		contactOperations.writeData(ContactOperationsImpl.I0Service.JSON_IO, "Addressbook");
+	}
+	
+	@Test
+	public void givenContactDetailsOfCSVFile_AbilityToReadJsonFile() {
 		AddressBookJson addressBookJson = new AddressBookJson();
-		addressBookJson.writeToJson("addressbook");
+		addressBookJson.readFromJson("addressbook");
 	}
 }

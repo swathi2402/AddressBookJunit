@@ -6,7 +6,7 @@ public interface ContactOperationsIF {
 
 	public void addAddressBook(String addressBookName);
 
-	public void addContact(I0Service ioservice, String addressBookName);
+	public void writeData(I0Service ioservice, String addressBookName);
 
 	public void checkToEdit(String addressBookName);
 
