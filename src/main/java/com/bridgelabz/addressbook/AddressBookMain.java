@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 import com.bridgelabz.addressbook.ContactOperationsImpl.I0Service;
 
-
 public class AddressBookMain {
 
 	public static void main(String[] args) {
@@ -18,9 +17,8 @@ public class AddressBookMain {
 		while (!exitAddressBook) {
 			System.out.println(
 					"Press:\n1 to Add new AddressBook \n2 to Search a Person \n3 to get persons by city and state \n4 to get count \n5 to display sort by name \n6 to sort by city \n7 to Exit");
-			int options = scanner.nextInt();
 
-			switch (options) {
+			switch (scanner.nextInt()) {
 			case 1:
 				System.out.println("Enter AddressBook Name");
 				String addressBookName = scanner.next();
@@ -29,9 +27,8 @@ public class AddressBookMain {
 				boolean exitContact = false;
 				while (!exitContact) {
 					System.out.println("Press:\n1 to Add contact \n2 to Edit contact \n3 to Delete \n4 to Exit");
-					int optionSelected = scanner.nextInt();
 
-					switch (optionSelected) {
+					switch (scanner.nextInt()) {
 					case 1:
 						contactOperations.writeData(I0Service.CONSOLE_IO, addressBookName);
 						break;
@@ -51,44 +48,36 @@ public class AddressBookMain {
 
 			case 2:
 				System.out.println("Enter first name of the person to search");
-				String nameToSearch = scanner.next();
-				contactOperations.searchPerson(nameToSearch);
+				contactOperations.searchPerson(scanner.next());
 				break;
 
 			case 3:
 				System.out.println("Enter name of the city");
-				String city = scanner.next();
-				contactOperations.getPersonsInCity(city);
+				contactOperations.getPersonsInCity(scanner.next());
 
 				System.out.println("Enter name of the state");
-				String state = scanner.next();
-				contactOperations.getPersonsInState(state);
+				contactOperations.getPersonsInState(scanner.next());
 				break;
 
 			case 4:
 				System.out.println("Enter name of the city");
-				String cityName = scanner.next();
-				contactOperations.getCountInCity(cityName);
+				contactOperations.getCountInCity(scanner.next());
 
 				System.out.println("Enter name of the state");
-				String stateName = scanner.next();
-				contactOperations.getCountInState(stateName);
+				contactOperations.getCountInState(scanner.next());
 				break;
 
 			case 5:
 				System.out.println("Enter name of the AddressBook");
-				String bookName = scanner.next();
-				contactOperations.sortByName(bookName);
+				contactOperations.sortByName(scanner.next());
 				break;
 
 			case 6:
 				System.out.println("Enter name of the city");
-				String nameOfCity = scanner.next();
-				contactOperations.sortByCity(nameOfCity);
+				contactOperations.sortByCity(scanner.next());
 
 				System.out.println("Enter name of the state");
-				String nameOfState = scanner.next();
-				contactOperations.sortByState(nameOfState);
+				contactOperations.sortByState(scanner.next());
 				break;
 
 			case 7:
