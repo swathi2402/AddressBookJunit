@@ -33,7 +33,7 @@ public class AddressBookMain {
 
 					switch (optionSelected) {
 					case 1:
-						contactOperations.addContact(I0Service.CONSOLE_IO, addressBookName);
+						contactOperations.writeData(I0Service.CONSOLE_IO, addressBookName);
 						break;
 					case 2:
 						contactOperations.checkToEdit(addressBookName);
