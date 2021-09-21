@@ -11,6 +11,8 @@ import java.util.List;
 import com.bridgelabz.addressbook.Contact;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
@@ -38,22 +40,24 @@ public class AddressBookCSVReadWrite {
 			beanToCsv.write(contacts);
 		}
 	}
-	
+
 	public void readFromCSV(String name) throws IOException, CsvException {
 		final String PATH = "./" + name + ".csv";
-		try (Reader reader = Files.newBufferedReader(Paths.get(PATH));
-				CSVReader csvReader = new CSVReader(reader);) {
 
-			List<String[]> contacts = csvReader.readAll();
-			for (String[] contact : contacts) {
-				System.out.println("firstName: " + contact[0]);
-				System.out.println("lastName: " + contact[1]);
-				System.out.println("address: " + contact[2]);
-				System.out.println("city: " + contact[3]);
-				System.out.println("state: " + contact[4]);
-				System.out.println("ZIP: " + contact[5]);
-				System.out.println("phoneNumber: " + contact[6]);
-				System.out.println("email: " + contact[7]);			
+		try (Reader reader = Files.newBufferedReader(Paths.get(PATH));) {
+			CsvToBean<Contact> csvToBean = new CsvToBeanBuilder(reader).withType(Contact.class)
+					.withIgnoreLeadingWhiteSpace(true).build();
+
+			List<Contact> contacts = csvToBean.parse();
+			for (Contact contact : contacts) {
+				System.out.println("firstName: " + contact.getFirstName());
+				System.out.println("lastName: " + contact.getLastName());
+				System.out.println("address: " + contact.getAddress());
+				System.out.println("city: " + contact.getCity());
+				System.out.println("state: " + contact.getState());
+				System.out.println("ZIP: " + contact.getZIP());
+				System.out.println("phoneNumber: " + contact.getPhoneNumber());
+				System.out.println("email: " + contact.getEmail());
 				System.out.println("-------------------------------");
 			}
 
