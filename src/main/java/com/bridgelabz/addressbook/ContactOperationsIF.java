@@ -1,8 +1,5 @@
 package com.bridgelabz.addressbook;
 
-import java.sql.SQLException;
-import java.util.List;
-
 import com.bridgelabz.addressbook.ContactOperationsImpl.I0Service;
 
 public interface ContactOperationsIF {
@@ -30,12 +27,11 @@ public interface ContactOperationsIF {
 	public void sortByCity(String nameOfCity);
 
 	public void sortByState(String nameOfState);
-	
-	public long readData(I0Service ioservice, String name);
-	
-	public long countEntries(I0Service ioservice, String name);
-	
-	public List<Contact> readAddressBookDBData(I0Service ioservice) throws SQLException;
 
+	public long readData(I0Service ioservice, String name);
+
+	public long countEntries(I0Service ioservice, String name);
+
+//	public List<Contact> readAddressBookDBData(I0Service ioservice) throws SQLException;
 
 }

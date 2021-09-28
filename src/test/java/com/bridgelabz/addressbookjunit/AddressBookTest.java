@@ -7,9 +7,9 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 
-//import com.bridgelabz.addressbook.AddressBookDBService;
 import com.bridgelabz.addressbook.Contact;
 import com.bridgelabz.addressbook.ContactOperationsIF;
 import com.bridgelabz.addressbook.ContactOperationsImpl;
@@ -19,6 +19,11 @@ import com.opencsv.exceptions.CsvException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 
 public class AddressBookTest {
+	ContactOperationsIF contactOperations;
+	@Before
+	public void setUp() throws Exception {
+		contactOperations = new ContactOperationsImpl();
+	}
 
 	@Test
 	public void givenContactWriteToTheFile() {
@@ -36,14 +41,12 @@ public class AddressBookTest {
 
 	@Test
 	public void givenFileOnReadingFromFileShouldMatchEContactCount() {
-		ContactOperationsIF contactOperations = new ContactOperationsImpl();
 		long entries = contactOperations.readData(ContactOperationsImpl.I0Service.FILE_I0, "Addressbook");
 		assertEquals(3, entries);
 	}
 
 	@Test
 	public void addContactThroughConsole() {
-		ContactOperationsIF contactOperations = new ContactOperationsImpl();
 		contactOperations.addAddressBook("Addressbook");
 		contactOperations.writeData(ContactOperationsImpl.I0Service.CONSOLE_IO, "Addressbook");
 	}
@@ -51,7 +54,6 @@ public class AddressBookTest {
 	@Test
 	public void givenContactDetails_AbilityToCreateCSVFile()
 			throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException {
-		ContactOperationsIF contactOperations = new ContactOperationsImpl();
 		contactOperations.writeData(ContactOperationsImpl.I0Service.CSV_IO, "Addressbook");
 	}
 
@@ -75,8 +77,13 @@ public class AddressBookTest {
 	
 	@Test
 	public void givenAddressBookDB_WhenRetrieved_ShouldMatchContactCount() throws SQLException {
-		ContactOperationsIF contactOperations = new ContactOperationsImpl();
+		ContactOperationsImpl contactOperations = new ContactOperationsImpl();
 		List<Contact> addressBookData = contactOperations.readAddressBookDBData(I0Service.DB_IO);
 		assertEquals(4, addressBookData.size());
+	}
+	
+	@Test
+	public void whenContactUpdated_ShouldSyncWithDB() throws SQLException {
+		
 	}
 }

@@ -13,14 +13,14 @@ import com.bridgelabz.addressbookjunit.AddressBookCSVReadWrite;
 import com.bridgelabz.addressbookjunit.AddressBookJson;
 import com.bridgelabz.addressbookjunit.AdressBookFileIOService;
 
-public class ContactOperationsImpl implements ContactOperationsIF {
+public class ContactOperationsImpl implements ContactOperationsIF{
 
 	public enum I0Service {
 		CONSOLE_IO, FILE_I0, CSV_IO, JSON_IO, DB_IO
 	}
 
 	private List<Contact> addressBookList;
-	private AddressBookDBService addressBookDBService;
+	private AddressBookDBService addressBookDBService = new AddressBookDBService();
 
 	public ContactOperationsImpl() {
 
