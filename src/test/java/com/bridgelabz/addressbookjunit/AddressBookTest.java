@@ -3,13 +3,17 @@ package com.bridgelabz.addressbookjunit;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
 
+//import com.bridgelabz.addressbook.AddressBookDBService;
 import com.bridgelabz.addressbook.Contact;
 import com.bridgelabz.addressbook.ContactOperationsIF;
 import com.bridgelabz.addressbook.ContactOperationsImpl;
+import com.bridgelabz.addressbook.ContactOperationsImpl.I0Service;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
@@ -67,5 +71,12 @@ public class AddressBookTest {
 	public void givenContactDetailsOfCSVFile_AbilityToReadJsonFile() {
 		AddressBookJson addressBookJson = new AddressBookJson();
 		addressBookJson.readFromJson("addressbook");
+	}
+	
+	@Test
+	public void givenAddressBookDB_WhenRetrieved_ShouldMatchContactCount() throws SQLException {
+		ContactOperationsIF contactOperations = new ContactOperationsImpl();
+		List<Contact> addressBookData = contactOperations.readAddressBookDBData(I0Service.DB_IO);
+		assertEquals(4, addressBookData.size());
 	}
 }
