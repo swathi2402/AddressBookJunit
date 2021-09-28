@@ -1,5 +1,6 @@
 package com.bridgelabz.addressbook;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,10 +16,11 @@ import com.bridgelabz.addressbookjunit.AdressBookFileIOService;
 public class ContactOperationsImpl implements ContactOperationsIF {
 
 	public enum I0Service {
-		CONSOLE_IO, FILE_I0, CSV_IO, JSON_IO
+		CONSOLE_IO, FILE_I0, CSV_IO, JSON_IO, DB_IO
 	}
 
 	private List<Contact> addressBookList;
+	private AddressBookDBService addressBookDBService;
 
 	public ContactOperationsImpl() {
 
@@ -62,15 +64,21 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 				e.printStackTrace();
 			}
 			break;
-			
+
 		case JSON_IO:
 			new AddressBookJson().writeToJson(addressBookName);
 			break;
-			
+
 		default:
 			break;
 		}
 
+	}
+
+	public List<Contact> readAddressBookDBData(I0Service ioservice) throws SQLException {
+		if (ioservice.equals(I0Service.DB_IO))
+			this.addressBookList = addressBookDBService.readAddressBook();
+		return this.addressBookList;
 	}
 
 	public Contact createContact() {
