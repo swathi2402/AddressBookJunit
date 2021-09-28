@@ -13,7 +13,7 @@ import com.bridgelabz.addressbookjunit.AddressBookCSVReadWrite;
 import com.bridgelabz.addressbookjunit.AddressBookJson;
 import com.bridgelabz.addressbookjunit.AdressBookFileIOService;
 
-public class ContactOperationsImpl implements ContactOperationsIF{
+public class ContactOperationsImpl implements ContactOperationsIF {
 
 	public enum I0Service {
 		CONSOLE_IO, FILE_I0, CSV_IO, JSON_IO, DB_IO
@@ -183,6 +183,18 @@ public class ContactOperationsImpl implements ContactOperationsIF{
 		}
 		personsInState.get(state).add(contactToBeEdit);
 
+	}
+
+	@Override
+	public void updateAddressBook(String name, String phoneNumber) {
+		// TODO Auto-generated method stub
+
+	}
+	
+	@Override
+	public boolean checkAddressBookInSyncWithDB(String name) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override

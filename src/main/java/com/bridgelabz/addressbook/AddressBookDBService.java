@@ -32,7 +32,6 @@ public class AddressBookDBService {
 	}
 
 	public List<Contact> readAddressBook() {
-		System.out.println("HERE 2");
 		String sql = "SELECT * FROM contact";
 		List<Contact> addressBookList = new ArrayList<>();
 		try (Connection connection = this.getConnection()) {

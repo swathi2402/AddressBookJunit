@@ -1,6 +1,7 @@
 package com.bridgelabz.addressbookjunit;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -77,13 +78,15 @@ public class AddressBookTest {
 	
 	@Test
 	public void givenAddressBookDB_WhenRetrieved_ShouldMatchContactCount() throws SQLException {
-		ContactOperationsImpl contactOperations = new ContactOperationsImpl();
 		List<Contact> addressBookData = contactOperations.readAddressBookDBData(I0Service.DB_IO);
 		assertEquals(4, addressBookData.size());
 	}
 	
 	@Test
 	public void whenContactUpdated_ShouldSyncWithDB() throws SQLException {
-		
+		contactOperations.readAddressBookDBData(I0Service.DB_IO);
+		contactOperations.updateAddressBook("Swathi", "9922334455");
+		boolean result = contactOperations.checkAddressBookInSyncWithDB("Swathi");
+		assertTrue(result);
 	}
 }
