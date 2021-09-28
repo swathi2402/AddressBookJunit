@@ -187,14 +187,23 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 
 	@Override
 	public void updateAddressBook(String name, String phoneNumber) {
-		// TODO Auto-generated method stub
-
+		int result = addressBookDBService.updateContct(name, phoneNumber);
+		if (result == 0)
+			return;
+		Contact contact = this.getContact(name);
+		if (contact != null)
+			contact.setPhoneNumber(phoneNumber);
 	}
 	
+	private Contact getContact(String name) {
+		return this.addressBookList.stream()
+				.filter(contactItem -> contactItem.getFirstName().equals(name)).findFirst().orElse(null);
+	}
+
 	@Override
 	public boolean checkAddressBookInSyncWithDB(String name) {
-		// TODO Auto-generated method stub
-		return false;
+		List<Contact> addressBookDataList = addressBookDBService.getContactData(name);
+		return addressBookDataList.get(0).equals(getContact(name));
 	}
 
 	@Override

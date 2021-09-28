@@ -26,7 +26,6 @@ public class Contact {
 	private String phoneNumber;
 	@CsvBindByName
 	private String email;
-	
 
 	public Contact(String firstName, String lastName, String address, String city, String state, String zIP,
 			String phoneNumber, String email) {
@@ -42,9 +41,9 @@ public class Contact {
 	}
 
 	public Contact() {
-		
+
 	}
-	
+
 	public String getFirstName() {
 		return firstName;
 	}
@@ -107,5 +106,16 @@ public class Contact {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null || getClass() != obj.getClass())
+			return false;
+		Contact that = (Contact) obj;
+		return phoneNumber.compareTo(that.phoneNumber) == 0 && email.compareTo(that.email) == 0
+				&& firstName.compareTo(that.firstName) == 0 && lastName.compareTo(that.lastName) == 0;
 	}
 }
