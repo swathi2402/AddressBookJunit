@@ -30,6 +30,18 @@ public class AddressBookDBService {
 
 		return connection;
 	}
+	
+	private List<Contact> excecuteSqlQuery(String sql) {
+		List<Contact> contactList = null;
+		try (Connection connection = this.getConnection()) {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sql);
+			contactList = getContactData(resultSet);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return contactList;
+	}
 
 	public List<Contact> readAddressBook() {
 
@@ -71,16 +83,10 @@ public class AddressBookDBService {
 	}
 
 	public List<Contact> getContactData(String name) {
-		List<Contact> addressBookList = null;
 		String sql = "SELECT * FROM contact";
-		try (Connection connection = this.getConnection()) {
-			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery(sql);
-			addressBookList = getContactData(resultSet);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return addressBookList;
+		List<Contact> contactList = excecuteSqlQuery(sql);
+		return contactList;
+
 	}
 
 	private List<Contact> getContactData(ResultSet resultSet) {
@@ -107,14 +113,13 @@ public class AddressBookDBService {
 
 	public List<Contact> getContactFromDateRange(String date) {
 		String sql = String.format("SELECT * FROM contact WHERE start BETWEEN CAST('%s' AS DATE) AND DATE(NOW());", date);
-		List<Contact> contactList = null;
-		try (Connection connection = this.getConnection()) {
-			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery(sql);
-			contactList = getContactData(resultSet);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		List<Contact> contactList = excecuteSqlQuery(sql);
+		return contactList;
+	}
+
+	public List<Contact> getContactFromAddress(String city, String state) {
+		String sql = String.format("SELECT * FROM contact NATURAL JOIN address WHERE city = '%s' OR state = '%s';", city, state);
+		List<Contact> contactList = excecuteSqlQuery(sql);
 		return contactList;
 	}
 

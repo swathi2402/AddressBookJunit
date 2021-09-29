@@ -102,6 +102,6 @@ public class AddressBookTest {
 	public void getContactFromAddressBook_GivenCityOrState() throws SQLException {
 		contactOperations.readAddressBookDBData(I0Service.DB_IO);
 		List<Contact> contactList = contactOperations.getContactFromAddress("Kundapura", "Karnataka");
-		assertEquals(3, contactList.size());
+		assertEquals(2, contactList.size());
 	}
 }

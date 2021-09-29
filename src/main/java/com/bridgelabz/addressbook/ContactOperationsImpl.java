@@ -194,10 +194,10 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 		if (contact != null)
 			contact.setPhoneNumber(phoneNumber);
 	}
-	
+
 	private Contact getContact(String name) {
-		return this.addressBookList.stream()
-				.filter(contactItem -> contactItem.getFirstName().equals(name)).findFirst().orElse(null);
+		return this.addressBookList.stream().filter(contactItem -> contactItem.getFirstName().equals(name)).findFirst()
+				.orElse(null);
 	}
 
 	@Override
@@ -335,14 +335,14 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 
 	@Override
 	public List<Contact> getContactFromDateRange(String date) {
-		List<Contact>  contactList = addressBookDBService.getContactFromDateRange(date);
+		List<Contact> contactList = addressBookDBService.getContactFromDateRange(date);
 		return contactList;
 	}
 
 	@Override
 	public List<Contact> getContactFromAddress(String city, String state) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Contact> contactList = addressBookDBService.getContactFromAddress(city, state);
+		return contactList;
 	}
 
 }
