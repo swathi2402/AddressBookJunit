@@ -335,8 +335,8 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 
 	@Override
 	public List<Contact> getContactFromDateRange(String date) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Contact>  contactList = addressBookDBService.getContactFromDateRange(date);
+		return contactList;
 	}
 
 }

@@ -78,7 +78,8 @@ public class AddressBookDBService {
 			ResultSet resultSet = statement.executeQuery(sql);
 			addressBookList = getContactData(resultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();		}
+			e.printStackTrace();
+		}
 		return addressBookList;
 	}
 
@@ -102,6 +103,19 @@ public class AddressBookDBService {
 			e.printStackTrace();
 		}
 		return addressBookList;
+	}
+
+	public List<Contact> getContactFromDateRange(String date) {
+		String sql = String.format("SELECT * FROM contact WHERE start BETWEEN CAST('%s' AS DATE) AND DATE(NOW());", date);
+		List<Contact> contactList = null;
+		try (Connection connection = this.getConnection()) {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sql);
+			contactList = getContactData(resultSet);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return contactList;
 	}
 
 }
