@@ -50,19 +50,7 @@ public class AddressBookDBService {
 		try (Connection connection = this.getConnection()) {
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery(sql);
-			while (resultSet.next()) {
-				String firstName = resultSet.getString("first_name");
-				String lastName = resultSet.getString("last_name");
-				String phoneNumber = resultSet.getString("phone_number");
-				String email = resultSet.getString("email");
-				Contact contact = new Contact();
-				contact.setFirstName(firstName);
-				contact.setLastName(lastName);
-				contact.setPhoneNumber(phoneNumber);
-				contact.setEmail(email);
-				addressBookList.add(contact);
-
-			}
+			addressBookList = getContactData(resultSet);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
