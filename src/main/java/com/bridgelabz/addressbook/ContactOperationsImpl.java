@@ -345,4 +345,11 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 		return contactList;
 	}
 
+	@Override
+	public void addContactToDataBase(String firstName, String lastName, String phoneNumber, String email,
+			int addressBookId, String type, String place, String city, String state, String zipCode) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

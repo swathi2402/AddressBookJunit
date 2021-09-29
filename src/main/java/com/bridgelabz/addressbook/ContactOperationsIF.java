@@ -45,4 +45,7 @@ public interface ContactOperationsIF {
 
 	public List<Contact> getContactFromAddress(String city, String state);
 
+	public void addContactToDataBase(String firstName, String lastName, String phoneNumber, String email, int addressBookId,
+			String type, String place, String city, String state, String zipCode);
+
 }

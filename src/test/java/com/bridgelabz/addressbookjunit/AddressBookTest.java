@@ -104,4 +104,12 @@ public class AddressBookTest {
 		List<Contact> contactList = contactOperations.getContactFromAddress("Kundapura", "Karnataka");
 		assertEquals(2, contactList.size());
 	}
+	
+	@Test
+	public void givenNewContact_WhenAdded_ShouldBeInSyncWithDB() throws SQLException {
+		contactOperations.readAddressBookDBData(I0Service.DB_IO);
+		contactOperations.addContactToDataBase("Rachana", "Holla", "6786798765", "rachana@gmail.com", 2, "Professional", "Badakere", "Udupi", "Karnataka", "567567");
+		boolean result = contactOperations.checkAddressBookInSyncWithDB("Rachana");
+		assertTrue(result);
+	}
 }
