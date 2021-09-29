@@ -347,8 +347,9 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 
 	@Override
 	public void addContactToDataBase(String firstName, String lastName, String phoneNumber, String email,
-			int addressBookId, String type, String place, String city, String state, String zipCode) {
-		// TODO Auto-generated method stub
+			int addressBookId, String type, String place, String city, String state, String zipCode) throws SQLException {
+		this.addressBookList.add(addressBookDBService.addContact(firstName, lastName, phoneNumber, email,
+			addressBookId, type, place, city, state, zipCode));
 		
 	}
 

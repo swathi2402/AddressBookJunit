@@ -113,4 +113,46 @@ public class AddressBookDBService {
 		return contactList;
 	}
 
+	public Contact addContact(String firstName, String lastName, String phoneNumber, String email, int addressBookId,
+			String type, String place, String city, String state, String zipCode) throws SQLException {
+		int contactId = -1;
+		Contact contact = null;
+		Connection connection = null;
+
+		connection = this.getConnection();
+
+		try (Statement statement = connection.createStatement()) {
+			String sql = String.format(
+					"INSERT INTO contact (first_name, last_name, phone_number, email, address_book_id) VALUES ('%s', '%s', '%s', '%s', '%d');",
+					firstName, lastName, phoneNumber, email, addressBookId);
+			int rowAffected = statement.executeUpdate(sql, statement.RETURN_GENERATED_KEYS);
+			if (rowAffected == 1) {
+				ResultSet resultSet = statement.getGeneratedKeys();
+				if (resultSet.next())
+					contactId = resultSet.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		try (Statement statement = connection.createStatement()) {
+			String sql = String.format("INSERT INTO type VALUES ('%d', '%s');", contactId, type);
+			statement.executeUpdate(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		try (Statement statement = connection.createStatement()) {
+			String sql = String.format("INSERT INTO address VALUES ('%d', '%s', '%s', '%s', '%s');", contactId, place, city, state, zipCode);
+			int rowAffected = statement.executeUpdate(sql);
+			if (rowAffected == 1) {
+				contact = new Contact(firstName, lastName, place, city, state, zipCode, phoneNumber, email);
+			}
+			statement.executeUpdate(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return contact;
+	}
+
 }
