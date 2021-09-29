@@ -43,4 +43,6 @@ public interface ContactOperationsIF {
 
 	public List<Contact> getContactFromDateRange(String date);
 
+	public List<Contact> getContactFromAddress(String city, String state);
+
 }

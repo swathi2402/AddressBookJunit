@@ -339,4 +339,10 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 		return contactList;
 	}
 
+	@Override
+	public List<Contact> getContactFromAddress(String city, String state) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

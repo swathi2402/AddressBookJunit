@@ -97,4 +97,11 @@ public class AddressBookTest {
 		List<Contact> contactList = contactOperations.getContactFromDateRange(date);
 		assertEquals(3, contactList.size());
 	}
+	
+	@Test
+	public void getContactFromAddressBook_GivenCityOrState() throws SQLException {
+		contactOperations.readAddressBookDBData(I0Service.DB_IO);
+		List<Contact> contactList = contactOperations.getContactFromAddress("Kundapura", "Karnataka");
+		assertEquals(3, contactList.size());
+	}
 }
