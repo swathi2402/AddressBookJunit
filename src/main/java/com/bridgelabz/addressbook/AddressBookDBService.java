@@ -93,9 +93,16 @@ public class AddressBookDBService {
 	}
 
 	public List<Contact> getContactData(String name) {
+		List<Contact> addressBookList = null;
 		String sql = "SELECT * FROM contact";
-		List<Contact> contactList = excecuteSqlQuery(sql);
-		return contactList;
+		try (Connection connection = this.getConnection()) {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sql);
+			addressBookList = getContactData(resultSet);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return addressBookList;
 
 	}
 
@@ -134,16 +141,17 @@ public class AddressBookDBService {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		try (Statement statement = connection.createStatement()) {
 			String sql = String.format("INSERT INTO type VALUES ('%d', '%s');", contactId, type);
 			statement.executeUpdate(sql);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		try (Statement statement = connection.createStatement()) {
-			String sql = String.format("INSERT INTO address VALUES ('%d', '%s', '%s', '%s', '%s');", contactId, place, city, state, zipCode);
+			String sql = String.format("INSERT INTO address VALUES ('%d', '%s', '%s', '%s', '%s');", contactId, place,
+					city, state, zipCode);
 			int rowAffected = statement.executeUpdate(sql);
 			if (rowAffected == 1) {
 				contact = new Contact(firstName, lastName, place, city, state, zipCode, phoneNumber, email);
