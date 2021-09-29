@@ -333,4 +333,10 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 		return this.addressBookList.size();
 	}
 
+	@Override
+	public List<Contact> getContactFromDateRange(String date) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

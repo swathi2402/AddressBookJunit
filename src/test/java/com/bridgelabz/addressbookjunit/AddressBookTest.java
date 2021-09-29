@@ -89,4 +89,12 @@ public class AddressBookTest {
 		boolean result = contactOperations.checkAddressBookInSyncWithDB("Swathi");
 		assertTrue(result);
 	}
+	
+	@Test
+	public void getContactCountFromAddressBook_GivenADateRange() throws SQLException {
+		contactOperations.readAddressBookDBData(I0Service.DB_IO);
+		String date = "2020-01-01";
+		List<Contact> contactList = contactOperations.getContactFromDateRange(date);
+		assertEquals(3, contactList.size());
+	}
 }

@@ -41,4 +41,6 @@ public interface ContactOperationsIF {
 
 	public boolean checkAddressBookInSyncWithDB(String name);
 
+	public List<Contact> getContactFromDateRange(String date);
+
 }
