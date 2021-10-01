@@ -94,7 +94,7 @@ public class AddressBookDBService {
 
 	public List<Contact> getContactData(String name) {
 		List<Contact> addressBookList = null;
-		String sql = "SELECT * FROM contact";
+		String sql = String.format("SELECT * FROM contact where first_name = '%s';", name);
 		try (Connection connection = this.getConnection()) {
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery(sql);
