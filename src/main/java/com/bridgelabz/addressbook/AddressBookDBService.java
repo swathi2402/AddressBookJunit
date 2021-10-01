@@ -127,6 +127,7 @@ public class AddressBookDBService {
 		Connection connection = null;
 
 		connection = this.getConnection();
+		connection.setAutoCommit(false);
 
 		try (Statement statement = connection.createStatement()) {
 			String sql = String.format(
@@ -140,13 +141,23 @@ public class AddressBookDBService {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 		}
 
 		try (Statement statement = connection.createStatement()) {
 			String sql = String.format("INSERT INTO type VALUES ('%d', '%s');", contactId, type);
 			statement.executeUpdate(sql);
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} catch (SQLException excep) {
+			excep.printStackTrace();
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 		}
 
 		try (Statement statement = connection.createStatement()) {
@@ -156,9 +167,16 @@ public class AddressBookDBService {
 			if (rowAffected == 1) {
 				contact = new Contact(firstName, lastName, place, city, state, zipCode, phoneNumber, email);
 			}
-			statement.executeUpdate(sql);
-		} catch (SQLException e) {
-			e.printStackTrace();
+
+			connection.commit();
+
+		} catch (SQLException exception) {
+			exception.printStackTrace();
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 		}
 		return contact;
 	}

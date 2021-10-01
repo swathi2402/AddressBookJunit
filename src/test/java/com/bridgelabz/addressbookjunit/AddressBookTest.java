@@ -108,8 +108,8 @@ public class AddressBookTest {
 	@Test
 	public void givenNewContact_WhenAdded_ShouldBeInSyncWithDB() throws SQLException {
 		contactOperations.readAddressBookDBData(I0Service.DB_IO);
-		contactOperations.addContactToDataBase("Rachana", "Holla", "6786798765", "rachana@gmail.com", 2, "Professional", "Badakere", "Udupi", "Karnataka", "567567");
-		boolean result = contactOperations.checkAddressBookInSyncWithDB("Rachana");
+		contactOperations.addContactToDataBase("Spandana", "Shasthri", "9124565432", "spandana@gmail.com", 2, "Family", "Abcd", "Maduri", "TamilNadu", "676567");
+		boolean result = contactOperations.checkAddressBookInSyncWithDB("Spandana");
 		assertTrue(result);
 	}
 }
