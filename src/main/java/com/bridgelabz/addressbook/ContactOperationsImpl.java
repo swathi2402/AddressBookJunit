@@ -201,7 +201,11 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 
 	@Override
 	public boolean checkAddressBookInSyncWithDB(String name) throws AddressBookException {
+		if (name == "")
+			throw new AddressBookException(AddressBookException.ExceptionType.EMPTY, "Name is empty");
 		List<Contacts> addressBookDataList = addressBookDBService.getContactData(name);
+		if (addressBookDataList.size() == 0)
+			throw new AddressBookException(AddressBookException.ExceptionType.NOT_EXISTS, "Such name not exits");
 		return addressBookDataList.get(0).equals(getContact(name));
 	}
 
@@ -336,6 +340,8 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 
 	@Override
 	public List<Contacts> getContactFromDateRange(String date) throws AddressBookException {
+		if (date == "")
+			throw new AddressBookException(AddressBookException.ExceptionType.EMPTY, "Date field is empty");
 		List<Contacts> contactList = addressBookDBService.getContactFromDateRange(date);
 		return contactList;
 	}
