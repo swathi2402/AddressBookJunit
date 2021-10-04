@@ -5,18 +5,21 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.bridgelabz.addressbook.Address;
 import com.bridgelabz.addressbook.AddressBookCSVReadWrite;
 import com.bridgelabz.addressbook.AddressBookJson;
 import com.bridgelabz.addressbook.Contact;
 import com.bridgelabz.addressbook.ContactOperationsIF;
 import com.bridgelabz.addressbook.ContactOperationsImpl;
 import com.bridgelabz.addressbook.ContactOperationsImpl.I0Service;
+import com.bridgelabz.addressbook.Contacts;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
@@ -80,7 +83,7 @@ public class AddressBookTest {
 	
 	@Test
 	public void givenAddressBookDB_WhenRetrieved_ShouldMatchContactCount() throws SQLException {
-		List<Contact> addressBookData = contactOperations.readAddressBookDBData(I0Service.DB_IO);
+		List<Contacts> addressBookData = contactOperations.readAddressBookDBData(I0Service.DB_IO);
 		assertEquals(4, addressBookData.size());
 	}
 	
@@ -96,21 +99,24 @@ public class AddressBookTest {
 	public void getContactCountFromAddressBook_GivenADateRange() throws SQLException {
 		contactOperations.readAddressBookDBData(I0Service.DB_IO);
 		String date = "2020-01-01";
-		List<Contact> contactList = contactOperations.getContactFromDateRange(date);
+		List<Contacts> contactList = contactOperations.getContactFromDateRange(date);
 		assertEquals(3, contactList.size());
 	}
 	
 	@Test
 	public void getContactFromAddressBook_GivenCityOrState() throws SQLException {
 		contactOperations.readAddressBookDBData(I0Service.DB_IO);
-		List<Contact> contactList = contactOperations.getContactFromAddress("Kundapura", "Karnataka");
+		List<Contacts> contactList = contactOperations.getContactFromAddress("Kundapura", "Karnataka");
 		assertEquals(2, contactList.size());
 	}
 	
 	@Test
 	public void givenNewContact_WhenAdded_ShouldBeInSyncWithDB() throws SQLException {
 		contactOperations.readAddressBookDBData(I0Service.DB_IO);
-		contactOperations.addContactToDataBase("Spandana", "Shasthri", "9124565432", "spandana@gmail.com", 2, "Family", "Abcd", "Maduri", "TamilNadu", "676567");
+		LocalDate date = LocalDate.of(2020, 1, 8);
+		Contacts contacts = new Contacts("Spandana", "Shasthri", "9124565432", "spandana@gmail.com", date);
+		Address address = new Address("Abcd", "Maduri", "TamilNadu", "676567");
+		contactOperations.addContactToDataBase(contacts, address, "addresssBook2");
 		boolean result = contactOperations.checkAddressBookInSyncWithDB("Spandana");
 		assertTrue(result);
 	}
