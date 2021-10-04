@@ -184,6 +184,8 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 
 	@Override
 	public void updateAddressBook(String name, String phoneNumber) throws AddressBookException {
+		if (name == "")
+			throw new AddressBookException(AddressBookException.ExceptionType.EMPTY, "Name is empty");
 		int result = addressBookDBService.updateContct(name, phoneNumber);
 		if (result == 0)
 			throw new AddressBookException(AddressBookException.ExceptionType.NOT_EXISTS, "Such name not exists or enterd null");

@@ -126,7 +126,7 @@ public class AddressBookTest {
 			contactOperations.readAddressBookDBData(I0Service.DB_IO);
 			contactOperations.updateAddressBook("", "9922334455");
 		} catch (AddressBookException e) {
-			assertEquals(AddressBookException.ExceptionType.NOT_EXISTS, e.type);
+			assertEquals(AddressBookException.ExceptionType.EMPTY, e.type);
 			System.out.println(e.getMessage());
 		}
 	}

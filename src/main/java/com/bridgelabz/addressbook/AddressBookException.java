@@ -5,7 +5,7 @@ import java.sql.SQLException;
 public class AddressBookException extends SQLException {
 
 	public enum ExceptionType {
-		UNKOWN_DATABASE, SQL_EXCEPTION, NOT_EXISTS
+		UNKOWN_DATABASE, SQL_EXCEPTION, NOT_EXISTS, EMPTY
 	}
 
 	public ExceptionType type;
