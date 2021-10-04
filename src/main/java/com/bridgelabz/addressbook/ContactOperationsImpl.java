@@ -16,7 +16,7 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 	}
 
 	private List<Contact> addressBookList;
-	private List<Contacts> addressBookDBList;
+	private List<Contacts> addressBookList1;
 	private AddressBookDBService addressBookDBService = new AddressBookDBService();
 
 	public ContactOperationsImpl() {
@@ -74,8 +74,8 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 
 	public List<Contacts> readAddressBookDBData(I0Service ioservice) throws SQLException {
 		if (ioservice.equals(I0Service.DB_IO))
-			addressBookDBList = addressBookDBService.readAddressBook();
-		return addressBookDBList;
+			addressBookList1 = addressBookDBService.readAddressBook();
+		return addressBookList1;
 	}
 
 	public Contact createContact() {
@@ -193,7 +193,7 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 	}
 
 	private Contacts getContact(String name) {
-		return addressBookDBList.stream().filter(contactItem -> contactItem.getFirstName().equals(name)).findFirst()
+		return addressBookList1.stream().filter(contactItem -> contactItem.getFirstName().equals(name)).findFirst()
 				.orElse(null);
 	}
 
@@ -344,7 +344,7 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 
 	@Override
 	public void addContactToDataBase(Contacts contacts, Address address, String addressBookName) throws SQLException {
-		addressBookDBList.add(addressBookDBService.addContact(contacts, address, addressBookName));
+		addressBookList1.add(addressBookDBService.addContact(contacts, address, addressBookName));
 
 	}
 

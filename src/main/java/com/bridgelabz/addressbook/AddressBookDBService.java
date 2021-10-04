@@ -2,6 +2,7 @@ package com.bridgelabz.addressbook;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,6 +15,8 @@ public class AddressBookDBService {
 	public AddressBookDBService() {
 
 	}
+
+	private PreparedStatement contactData;
 
 	private Connection getConnection() {
 		String jdbcURL = "jdbc:mysql://localhost:3306/address_book_service?useSSL=false";
@@ -97,16 +100,27 @@ public class AddressBookDBService {
 
 	public List<Contacts> getContactData(String name) {
 		List<Contacts> addressBookList = null;
-		String sql = String.format("SELECT * FROM contact where first_name = '%s';", name);
-		try (Connection connection = this.getConnection()) {
-			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery(sql);
+		if (this.contactData == null)
+			this.prepareStatementForContactData();
+		try {
+			contactData.setString(1, name);
+			ResultSet resultSet = contactData.executeQuery();
 			addressBookList = getContactData(resultSet);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return addressBookList;
 
+	}
+
+	private void prepareStatementForContactData() {
+		try {
+			Connection connection = this.getConnection();
+			String sql = "SELECT * FROM contact where first_name = ?;";
+			contactData = connection.prepareStatement(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public List<Contacts> getContactFromDateRange(String date) {
@@ -133,7 +147,7 @@ public class AddressBookDBService {
 		try (Statement statement = connection.createStatement()) {
 			int addressBookId = 0;
 			String getId = String.format(
-					"select address_book_id from address_book_name where address_book_name = '%s';", addressBookName);
+					"SELECT address_book_id FROM address_book_name WHERE address_book_name = '%s';", addressBookName);
 			ResultSet result = statement.executeQuery(getId);
 			while (result.next()) {
 				addressBookId = result.getInt("address_book_id");
