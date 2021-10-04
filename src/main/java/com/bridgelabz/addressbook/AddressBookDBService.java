@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLSyntaxErrorException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class AddressBookDBService {
 		return connection;
 	}
 
-	private List<Contacts> getContactData(ResultSet resultSet) {
+	private List<Contacts> getContactData(ResultSet resultSet) throws AddressBookException {
 		List<Contacts> addressBookList = new ArrayList<>();
 		try {
 			while (resultSet.next()) {
@@ -53,25 +54,29 @@ public class AddressBookDBService {
 				addressBookList.add(contact);
 
 			}
+		} catch (SQLSyntaxErrorException e) {
+			throw new AddressBookException(AddressBookException.ExceptionType.UNKOWN_DATABASE, "Error in databse");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new AddressBookException(AddressBookException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
 		}
 		return addressBookList;
 	}
 
-	private List<Contacts> excecuteSqlQuery(String sql) {
+	private List<Contacts> excecuteSqlQuery(String sql) throws AddressBookException {
 		List<Contacts> contactList = null;
 		try (Connection connection = this.getConnection()) {
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery(sql);
 			contactList = getContactData(resultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new AddressBookException(AddressBookException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
 		}
 		return contactList;
 	}
 
-	public List<Contacts> readAddressBook() {
+	public List<Contacts> readAddressBook() throws AddressBookException {
 
 		String sql = "SELECT * FROM contact";
 		List<Contacts> addressBookList = new ArrayList<>();
@@ -80,25 +85,29 @@ public class AddressBookDBService {
 			ResultSet resultSet = statement.executeQuery(sql);
 			addressBookList = getContactData(resultSet);
 
+		} catch (SQLSyntaxErrorException e) {
+			throw new AddressBookException(AddressBookException.ExceptionType.UNKOWN_DATABASE, "Error in databse");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new AddressBookException(AddressBookException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
 		}
 		return addressBookList;
 	}
 
-	public int updateContct(String name, String phoneNumber) {
+	public int updateContct(String name, String phoneNumber) throws AddressBookException {
 		int result = 0;
 		String sql = String.format("UPDATE contact SET phone_number = '%s' WHERE first_name ='%s';", phoneNumber, name);
 		try (Connection connection = this.getConnection()) {
 			Statement statement = connection.createStatement();
 			result = statement.executeUpdate(sql);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new AddressBookException(AddressBookException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
 		}
 		return result;
 	}
 
-	public List<Contacts> getContactData(String name) {
+	public List<Contacts> getContactData(String name) throws AddressBookException {
 		List<Contacts> addressBookList = null;
 		if (this.contactData == null)
 			this.prepareStatementForContactData();
@@ -107,42 +116,49 @@ public class AddressBookDBService {
 			ResultSet resultSet = contactData.executeQuery();
 			addressBookList = getContactData(resultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new AddressBookException(AddressBookException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
 		}
 		return addressBookList;
 
 	}
 
-	private void prepareStatementForContactData() {
+	private void prepareStatementForContactData() throws AddressBookException {
 		try {
 			Connection connection = this.getConnection();
 			String sql = "SELECT * FROM contact where first_name = ?;";
 			contactData = connection.prepareStatement(sql);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new AddressBookException(AddressBookException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
 		}
 	}
 
-	public List<Contacts> getContactFromDateRange(String date) {
+	public List<Contacts> getContactFromDateRange(String date) throws AddressBookException {
 		String sql = String.format("SELECT * FROM contact WHERE start BETWEEN CAST('%s' AS DATE) AND DATE(NOW());",
 				date);
 		List<Contacts> contactList = excecuteSqlQuery(sql);
 		return contactList;
 	}
 
-	public List<Contacts> getContactFromAddress(String city, String state) {
+	public List<Contacts> getContactFromAddress(String city, String state) throws AddressBookException {
 		String sql = String.format("SELECT * FROM contact NATURAL JOIN address WHERE city = '%s' OR state = '%s';",
 				city, state);
 		List<Contacts> contactList = excecuteSqlQuery(sql);
 		return contactList;
 	}
 
-	public Contacts addContact(Contacts contacts, Address address, String addressBookName) throws SQLException {
+	public Contacts addContact(Contacts contacts, Address address, String addressBookName) throws AddressBookException {
 		int contactId = -1;
 		Connection connection = null;
 
-		connection = this.getConnection();
-		connection.setAutoCommit(false);
+		try {
+			connection = this.getConnection();
+			connection.setAutoCommit(false);
+		} catch (SQLException e1) {
+			throw new AddressBookException(AddressBookException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
+		}
 
 		try (Statement statement = connection.createStatement()) {
 			int addressBookId = 0;
@@ -164,11 +180,12 @@ public class AddressBookDBService {
 					contactId = resultSet.getInt(1);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+
 			try {
 				connection.rollback();
 			} catch (SQLException e1) {
-				e1.printStackTrace();
+				throw new AddressBookException(AddressBookException.ExceptionType.SQL_EXCEPTION,
+						"Syntax error in sql statement");
 			}
 		}
 
@@ -184,8 +201,9 @@ public class AddressBookDBService {
 			exception.printStackTrace();
 			try {
 				connection.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
+			} catch (SQLException e) {
+				throw new AddressBookException(AddressBookException.ExceptionType.SQL_EXCEPTION,
+						"Syntax error in sql statement");
 			}
 		}
 		return contacts;

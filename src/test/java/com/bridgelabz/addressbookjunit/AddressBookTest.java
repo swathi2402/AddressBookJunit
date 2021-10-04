@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import com.bridgelabz.addressbook.Address;
 import com.bridgelabz.addressbook.AddressBookCSVReadWrite;
+import com.bridgelabz.addressbook.AddressBookException;
 import com.bridgelabz.addressbook.AddressBookJson;
 import com.bridgelabz.addressbook.Contact;
 import com.bridgelabz.addressbook.ContactOperationsIF;
@@ -82,13 +83,13 @@ public class AddressBookTest {
 	}
 	
 	@Test
-	public void givenAddressBookDB_WhenRetrieved_ShouldMatchContactCount() throws SQLException {
+	public void givenAddressBookDB_WhenRetrieved_ShouldMatchContactCount() throws AddressBookException {
 		List<Contacts> addressBookData = contactOperations.readAddressBookDBData(I0Service.DB_IO);
 		assertEquals(4, addressBookData.size());
 	}
 	
 	@Test
-	public void whenContactUpdated_ShouldSyncWithDB() throws SQLException {
+	public void whenContactUpdated_ShouldSyncWithDB() throws AddressBookException {
 		contactOperations.readAddressBookDBData(I0Service.DB_IO);
 		contactOperations.updateAddressBook("Swathi", "9922334455");
 		boolean result = contactOperations.checkAddressBookInSyncWithDB("Swathi");
@@ -96,7 +97,7 @@ public class AddressBookTest {
 	}
 	
 	@Test
-	public void getContactCountFromAddressBook_GivenADateRange() throws SQLException {
+	public void getContactCountFromAddressBook_GivenADateRange() throws AddressBookException {
 		contactOperations.readAddressBookDBData(I0Service.DB_IO);
 		String date = "2020-01-01";
 		List<Contacts> contactList = contactOperations.getContactFromDateRange(date);
@@ -104,14 +105,14 @@ public class AddressBookTest {
 	}
 	
 	@Test
-	public void getContactFromAddressBook_GivenCityOrState() throws SQLException {
+	public void getContactFromAddressBook_GivenCityOrState() throws AddressBookException {
 		contactOperations.readAddressBookDBData(I0Service.DB_IO);
 		List<Contacts> contactList = contactOperations.getContactFromAddress("Kundapura", "Karnataka");
 		assertEquals(2, contactList.size());
 	}
 	
 	@Test
-	public void givenNewContact_WhenAdded_ShouldBeInSyncWithDB() throws SQLException {
+	public void givenNewContact_WhenAdded_ShouldBeInSyncWithDB() throws AddressBookException {
 		contactOperations.readAddressBookDBData(I0Service.DB_IO);
 		LocalDate date = LocalDate.of(2020, 1, 8);
 		Contacts contacts = new Contacts("Spandana", "Shasthri", "9124565432", "spandana@gmail.com", date);

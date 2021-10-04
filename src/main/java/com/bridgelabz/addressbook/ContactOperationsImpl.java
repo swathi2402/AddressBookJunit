@@ -1,6 +1,5 @@
 package com.bridgelabz.addressbook;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,7 +71,7 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 
 	}
 
-	public List<Contacts> readAddressBookDBData(I0Service ioservice) throws SQLException {
+	public List<Contacts> readAddressBookDBData(I0Service ioservice) throws AddressBookException {
 		if (ioservice.equals(I0Service.DB_IO))
 			addressBookList1 = addressBookDBService.readAddressBook();
 		return addressBookList1;
@@ -183,7 +182,7 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 	}
 
 	@Override
-	public void updateAddressBook(String name, String phoneNumber) {
+	public void updateAddressBook(String name, String phoneNumber) throws AddressBookException {
 		int result = addressBookDBService.updateContct(name, phoneNumber);
 		if (result == 0)
 			return;
@@ -198,7 +197,7 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 	}
 
 	@Override
-	public boolean checkAddressBookInSyncWithDB(String name) {
+	public boolean checkAddressBookInSyncWithDB(String name) throws AddressBookException {
 		List<Contacts> addressBookDataList = addressBookDBService.getContactData(name);
 		return addressBookDataList.get(0).equals(getContact(name));
 	}
@@ -331,19 +330,19 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 	}
 
 	@Override
-	public List<Contacts> getContactFromDateRange(String date) {
+	public List<Contacts> getContactFromDateRange(String date) throws AddressBookException {
 		List<Contacts> contactList = addressBookDBService.getContactFromDateRange(date);
 		return contactList;
 	}
 
 	@Override
-	public List<Contacts> getContactFromAddress(String city, String state) {
+	public List<Contacts> getContactFromAddress(String city, String state) throws AddressBookException {
 		List<Contacts> contactList = addressBookDBService.getContactFromAddress(city, state);
 		return contactList;
 	}
 
 	@Override
-	public void addContactToDataBase(Contacts contacts, Address address, String addressBookName) throws SQLException {
+	public void addContactToDataBase(Contacts contacts, Address address, String addressBookName) throws AddressBookException {
 		addressBookList1.add(addressBookDBService.addContact(contacts, address, addressBookName));
 
 	}

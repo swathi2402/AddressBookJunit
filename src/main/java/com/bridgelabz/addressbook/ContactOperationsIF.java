@@ -35,16 +35,16 @@ public interface ContactOperationsIF {
 
 	public long countEntries(I0Service ioservice, String name);
 
-	public List<Contacts> readAddressBookDBData(I0Service ioservice) throws SQLException;
+	public List<Contacts> readAddressBookDBData(I0Service ioservice) throws AddressBookException;
 
-	public void updateAddressBook(String name, String phoneNumber);
+	public void updateAddressBook(String name, String phoneNumber) throws AddressBookException;
 
-	public boolean checkAddressBookInSyncWithDB(String name);
+	public boolean checkAddressBookInSyncWithDB(String name) throws AddressBookException;
 
-	public List<Contacts> getContactFromDateRange(String date);
+	public List<Contacts> getContactFromDateRange(String date) throws AddressBookException;
 
-	public List<Contacts> getContactFromAddress(String city, String state);
+	public List<Contacts> getContactFromAddress(String city, String state) throws AddressBookException;
 
-	public void addContactToDataBase(Contacts contacts, Address address, String addressBookName) throws SQLException;
+	public void addContactToDataBase(Contacts contacts, Address address, String addressBookName) throws AddressBookException;
 
 }
