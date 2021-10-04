@@ -97,6 +97,17 @@ public class AddressBookTest {
 		boolean result = contactOperations.checkAddressBookInSyncWithDB("Swathi");
 		assertTrue(result);
 	}
+	
+	@Test
+	public void givenNameWhenNotExists_ShouldThrowError() throws AddressBookException {
+		try{
+			contactOperations.readAddressBookDBData(I0Service.DB_IO);
+			contactOperations.updateAddressBook("Abcd", "9922334455");
+		} catch (AddressBookException e) {
+			assertEquals(AddressBookException.ExceptionType.NULL, e.type);
+			System.out.println(e.getMessage());
+		}
+	}
 
 	@Test
 	public void getContactCountFromAddressBook_GivenADateRange() throws AddressBookException {
