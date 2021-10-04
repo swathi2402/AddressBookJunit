@@ -24,11 +24,11 @@ public class AddressBookJson {
 
 		try (Reader reader = Files.newBufferedReader(Paths.get(CSV_PATH));) {
 
-			CsvToBeanBuilder<Contact> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
-			csvToBeanBuilder.withType(Contact.class);
+			CsvToBeanBuilder<Contacts> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
+			csvToBeanBuilder.withType(Contacts.class);
 			csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
-			CsvToBean<Contact> csvToBean = csvToBeanBuilder.build();
-			List<Contact> csvUsers = csvToBean.parse();
+			CsvToBean<Contacts> csvToBean = csvToBeanBuilder.build();
+			List<Contacts> csvUsers = csvToBean.parse();
 
 			Gson gson = new Gson();
 			String json = gson.toJson(csvUsers);
@@ -47,8 +47,8 @@ public class AddressBookJson {
 
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(JSON_PATH));
-			Contact[] usrObj = gson.fromJson(br, Contact[].class);
-			List<Contact> csvUserList = Arrays.asList(usrObj);
+			Contacts[] usrObj = gson.fromJson(br, Contacts[].class);
+			List<Contacts> csvUserList = Arrays.asList(usrObj);
 			System.out.println(csvUserList);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
