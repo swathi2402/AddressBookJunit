@@ -1,6 +1,5 @@
 package com.bridgelabz.addressbook;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import com.bridgelabz.addressbook.ContactOperationsImpl.I0Service;
@@ -45,6 +44,7 @@ public interface ContactOperationsIF {
 
 	public List<Contacts> getContactFromAddress(String city, String state) throws AddressBookException;
 
-	public void addContactToDataBase(Contacts contacts, Address address, String addressBookName) throws AddressBookException;
+	public void addContactToDataBase(Contacts contacts, Address address, String addressBookName)
+			throws AddressBookException;
 
 }

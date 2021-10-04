@@ -9,9 +9,9 @@ import java.util.List;
 
 public class AdressBookFileIOService {
 
-	public void writeData(List<Contact> addressBook, String name) {
+	public void writeData(List<Contacts> addressBookList, String name) {
 		StringBuffer contactBuffer = new StringBuffer();
-		addressBook.forEach(contact -> {
+		addressBookList.forEach(contact -> {
 			String contactDataString = contact.toString().concat("\n");
 			contactBuffer.append(contactDataString);
 		});
@@ -33,14 +33,16 @@ public class AdressBookFileIOService {
 		return enteries;
 	}
 
-	public List<Contact> readData(String name) {
-		List<Contact> contactDetails = new ArrayList<Contact>();
+	public List<Contacts> readData(String name) {
+		List<Contacts> contactDetails = new ArrayList<Contacts>();
 		try {
 			Files.lines(new File(name).toPath()).map(line -> line.trim()).forEach(line -> {
-				Contact tempContact = new Contact(line.split(",")[0].split("=")[1], line.split(",")[1].split("=")[1],
-						line.split(",")[2].split("=")[1], line.split(",")[3].split("=")[1],
-						line.split(",")[4].split("=")[1], line.split(",")[5].split("=")[1],
-						line.split(",")[6].split("=")[1], line.split(",")[7].split("=")[1]);
+				Contacts tempContact = new Contacts();
+						tempContact.setFirstName(line.split(",")[0].split("=")[1]);
+						tempContact.setLastName(line.split(",")[1].split("=")[1]);
+						tempContact.setPhoneNumber(line.split(",")[2].split("=")[1]);
+						tempContact.setEmail(line.split(",")[3].split("=")[1]);
+
 				contactDetails.add(tempContact);
 			});
 		} catch (IOException e) {

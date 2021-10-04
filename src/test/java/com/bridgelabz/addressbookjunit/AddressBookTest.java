@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +15,6 @@ import com.bridgelabz.addressbook.Address;
 import com.bridgelabz.addressbook.AddressBookCSVReadWrite;
 import com.bridgelabz.addressbook.AddressBookException;
 import com.bridgelabz.addressbook.AddressBookJson;
-import com.bridgelabz.addressbook.Contact;
 import com.bridgelabz.addressbook.ContactOperationsIF;
 import com.bridgelabz.addressbook.ContactOperationsImpl;
 import com.bridgelabz.addressbook.ContactOperationsImpl.I0Service;
@@ -27,6 +25,7 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 
 public class AddressBookTest {
 	ContactOperationsIF contactOperations;
+
 	@Before
 	public void setUp() throws Exception {
 		contactOperations = new ContactOperationsImpl();
@@ -34,11 +33,14 @@ public class AddressBookTest {
 
 	@Test
 	public void givenContactWriteToTheFile() {
-		Contact[] contacts = {
-				new Contact("Swathi", "Hebbar", "Navunda", "Kundapura", "Karnataka", "567567", "1234567890",
-						"swathi@gmail.com"),
-				new Contact("Abc", "Def", "Dfgh", "Kundapura", "Karnataka", "123123", "4567890123", "abc@gmail.com"),
-				new Contact("Xyz", "Abc", "Resdf", "Gfhuj", "Fdredf", "678678", "7890123456", "xyz@gmail.com") };
+		Address address1 = new Address("Navunda", "Kundapura", "Karnataka", "567567");
+		Address address2 = new Address("Dfgh", "Kundapura", "Karnataka", "123123");
+		Address address3 = new Address("Resdf", "Gfhuj", "Fdredf", "678678");
+		Contacts[] contacts = { 
+				new Contacts("Swathi", "Hebbar", "1234567890", "swathi@gmail.com", address1),
+				new Contacts("Abc", "Def", "4567890123", "abc@gmail.com", address2),
+				new Contacts("Xyz", "Abc", "7890123456", "xyz@gmail.com", address3)
+		};
 		ContactOperationsIF contactOperations;
 		contactOperations = new ContactOperationsImpl(Arrays.asList(contacts));
 		contactOperations.writeData(ContactOperationsImpl.I0Service.FILE_I0, "Addressbook");
@@ -75,19 +77,19 @@ public class AddressBookTest {
 		ContactOperationsIF contactOperations = new ContactOperationsImpl();
 		contactOperations.writeData(ContactOperationsImpl.I0Service.JSON_IO, "Addressbook");
 	}
-	
+
 	@Test
 	public void givenContactDetailsOfCSVFile_AbilityToReadJsonFile() {
 		AddressBookJson addressBookJson = new AddressBookJson();
 		addressBookJson.readFromJson("addressbook");
 	}
-	
+
 	@Test
 	public void givenAddressBookDB_WhenRetrieved_ShouldMatchContactCount() throws AddressBookException {
 		List<Contacts> addressBookData = contactOperations.readAddressBookDBData(I0Service.DB_IO);
 		assertEquals(4, addressBookData.size());
 	}
-	
+
 	@Test
 	public void whenContactUpdated_ShouldSyncWithDB() throws AddressBookException {
 		contactOperations.readAddressBookDBData(I0Service.DB_IO);
@@ -95,7 +97,7 @@ public class AddressBookTest {
 		boolean result = contactOperations.checkAddressBookInSyncWithDB("Swathi");
 		assertTrue(result);
 	}
-	
+
 	@Test
 	public void getContactCountFromAddressBook_GivenADateRange() throws AddressBookException {
 		contactOperations.readAddressBookDBData(I0Service.DB_IO);
@@ -103,14 +105,14 @@ public class AddressBookTest {
 		List<Contacts> contactList = contactOperations.getContactFromDateRange(date);
 		assertEquals(3, contactList.size());
 	}
-	
+
 	@Test
 	public void getContactFromAddressBook_GivenCityOrState() throws AddressBookException {
 		contactOperations.readAddressBookDBData(I0Service.DB_IO);
 		List<Contacts> contactList = contactOperations.getContactFromAddress("Kundapura", "Karnataka");
 		assertEquals(2, contactList.size());
 	}
-	
+
 	@Test
 	public void givenNewContact_WhenAdded_ShouldBeInSyncWithDB() throws AddressBookException {
 		contactOperations.readAddressBookDBData(I0Service.DB_IO);
