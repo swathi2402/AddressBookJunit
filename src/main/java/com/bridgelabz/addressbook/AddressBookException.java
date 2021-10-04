@@ -4,11 +4,11 @@ import java.sql.SQLException;
 
 public class AddressBookException extends SQLException {
 
-	enum ExceptionType {
-		UNKOWN_DATABASE, SQL_EXCEPTION
+	public enum ExceptionType {
+		UNKOWN_DATABASE, SQL_EXCEPTION, NULL
 	}
 
-	ExceptionType type;
+	public ExceptionType type;
 
 	public AddressBookException(ExceptionType type, String message) {
 		super(message);

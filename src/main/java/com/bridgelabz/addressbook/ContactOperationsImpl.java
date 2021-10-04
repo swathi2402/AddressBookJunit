@@ -15,7 +15,6 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 	}
 
 	private List<Contacts> addressBookList;
-//	private List<Contacts> addressBookList1;
 	private AddressBookDBService addressBookDBService = new AddressBookDBService();
 
 	public ContactOperationsImpl() {
@@ -91,7 +90,7 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 		String email = scanner.nextLine();
 
 		Address address = new Address(place, city, state, zipCode);
-		Contacts newContact = new Contacts(firstName, lastName,  phoneNumber, email, address);
+		Contacts newContact = new Contacts(firstName, lastName, phoneNumber, email, address);
 		return newContact;
 	}
 
@@ -187,7 +186,7 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 	public void updateAddressBook(String name, String phoneNumber) throws AddressBookException {
 		int result = addressBookDBService.updateContct(name, phoneNumber);
 		if (result == 0)
-			return;
+			throw new AddressBookException(AddressBookException.ExceptionType.NULL, "Such name not exists");
 		Contacts contact = this.getContact(name);
 		if (contact != null)
 			contact.setPhoneNumber(phoneNumber);
@@ -300,7 +299,8 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 	@Override
 	public void sortByCity(String nameOfCity) {
 		List<Contacts> contactArray = personsInCity.get(nameOfCity);
-		List<Contacts> sortedCityList = contactArray.stream().sorted((s1, s2) -> (s1.getAddress().getCity().compareTo(s2.getAddress().getCity())))
+		List<Contacts> sortedCityList = contactArray.stream()
+				.sorted((s1, s2) -> (s1.getAddress().getCity().compareTo(s2.getAddress().getCity())))
 				.collect(Collectors.toList());
 		System.out.println("Persons in the City " + nameOfCity + " in sorted order: ");
 		sortedCityList.stream().forEach(n -> System.out.println(n.getFirstName() + " " + n.getLastName()));
@@ -310,7 +310,8 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 	public void sortByState(String nameOfState) {
 		List<Contacts> contactArray = personsInState.get(nameOfState);
 		List<Contacts> sortedStateList = contactArray.stream()
-				.sorted((s1, s2) -> (s1.getAddress().getState().compareTo(s2.getAddress().getState()))).collect(Collectors.toList());
+				.sorted((s1, s2) -> (s1.getAddress().getState().compareTo(s2.getAddress().getState())))
+				.collect(Collectors.toList());
 		System.out.println("Persons in the State " + nameOfState + " in sorted order: ");
 		sortedStateList.stream().forEach(n -> System.out.println(n.getFirstName() + " " + n.getLastName()));
 	}
@@ -344,7 +345,8 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 	}
 
 	@Override
-	public void addContactToDataBase(Contacts contacts, Address address, String addressBookName) throws AddressBookException {
+	public void addContactToDataBase(Contacts contacts, Address address, String addressBookName)
+			throws AddressBookException {
 		addressBookList.add(addressBookDBService.addContact(contacts, address, addressBookName));
 
 	}

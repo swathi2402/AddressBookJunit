@@ -1,4 +1,4 @@
-ADDRESS,CITY,EMAIL,FIRSTNAME,LASTNAME,PHONENUMBER,STATE,ZIP
-Navunda,Kundapura,swathi@gmail.com,Swathi,Hebbar,1234567890,Karnataka,567567
-Dfgh,Kundapura,abc@gmail.com,Abc,Def,4567890123,Karnataka,123123
-Resdf,Gfhuj,xyz@gmail.com,Xyz,Abc,7890123456,Fdredf,678678
+ADDRESS,DATEADDED,EMAIL,FIRSTNAME,LASTNAME,PHONENUMBER
+com.bridgelabz.addressbook.Address@5ecfb3a7,,swathi@gmail.com,Swathi,Hebbar,1234567890
+com.bridgelabz.addressbook.Address@1ba8fa98,,abc@gmail.com,Abc,Def,4567890123
+com.bridgelabz.addressbook.Address@2a3c74e5,,xyz@gmail.com,Xyz,Abc,7890123456
