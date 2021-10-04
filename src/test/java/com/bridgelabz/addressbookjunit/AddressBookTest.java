@@ -149,6 +149,18 @@ public class AddressBookTest {
 	}
 
 	@Test
+	public void givenEmptyDate_ShouldThrowException() throws AddressBookException {
+		try {
+			contactOperations.readAddressBookDBData(I0Service.DB_IO);
+			String date = "";
+			contactOperations.getContactFromDateRange(date);
+		} catch (AddressBookException e) {
+			assertEquals(AddressBookException.ExceptionType.EMPTY, e.type);
+			System.out.println(e.getMessage());
+		}
+	}
+
+	@Test
 	public void getContactFromAddressBook_GivenCityOrState() throws AddressBookException {
 		contactOperations.readAddressBookDBData(I0Service.DB_IO);
 		List<Contacts> contactList = contactOperations.getContactFromAddress("Kundapura", "Karnataka");
