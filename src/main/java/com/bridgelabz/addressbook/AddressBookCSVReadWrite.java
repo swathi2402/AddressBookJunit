@@ -1,4 +1,4 @@
-package com.bridgelabz.addressbookjunit;
+package com.bridgelabz.addressbook;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -8,7 +8,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bridgelabz.addressbook.Contact;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.bean.CsvToBean;

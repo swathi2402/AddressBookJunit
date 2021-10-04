@@ -1,4 +1,4 @@
-package com.bridgelabz.addressbookjunit;
+package com.bridgelabz.addressbook;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -11,7 +11,6 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-import com.bridgelabz.addressbook.Contact;
 import com.google.gson.Gson;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
@@ -42,7 +41,7 @@ public class AddressBookJson {
 		}
 	}
 
-	void readFromJson(String name) {
+	public void readFromJson(String name) {
 		final String JSON_PATH = "./" + name + ".json";
 		Gson gson = new Gson();
 
