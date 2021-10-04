@@ -16,6 +16,7 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 	}
 
 	private List<Contact> addressBookList;
+	private List<Contacts> addressBookDBList;
 	private AddressBookDBService addressBookDBService = new AddressBookDBService();
 
 	public ContactOperationsImpl() {
@@ -71,10 +72,10 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 
 	}
 
-	public List<Contact> readAddressBookDBData(I0Service ioservice) throws SQLException {
+	public List<Contacts> readAddressBookDBData(I0Service ioservice) throws SQLException {
 		if (ioservice.equals(I0Service.DB_IO))
-			this.addressBookList = addressBookDBService.readAddressBook();
-		return this.addressBookList;
+			addressBookDBList = addressBookDBService.readAddressBook();
+		return addressBookDBList;
 	}
 
 	public Contact createContact() {
@@ -186,19 +187,19 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 		int result = addressBookDBService.updateContct(name, phoneNumber);
 		if (result == 0)
 			return;
-		Contact contact = this.getContact(name);
+		Contacts contact = this.getContact(name);
 		if (contact != null)
 			contact.setPhoneNumber(phoneNumber);
 	}
 
-	private Contact getContact(String name) {
-		return this.addressBookList.stream().filter(contactItem -> contactItem.getFirstName().equals(name)).findFirst()
+	private Contacts getContact(String name) {
+		return addressBookDBList.stream().filter(contactItem -> contactItem.getFirstName().equals(name)).findFirst()
 				.orElse(null);
 	}
 
 	@Override
 	public boolean checkAddressBookInSyncWithDB(String name) {
-		List<Contact> addressBookDataList = addressBookDBService.getContactData(name);
+		List<Contacts> addressBookDataList = addressBookDBService.getContactData(name);
 		return addressBookDataList.get(0).equals(getContact(name));
 	}
 
@@ -330,23 +331,21 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 	}
 
 	@Override
-	public List<Contact> getContactFromDateRange(String date) {
-		List<Contact> contactList = addressBookDBService.getContactFromDateRange(date);
+	public List<Contacts> getContactFromDateRange(String date) {
+		List<Contacts> contactList = addressBookDBService.getContactFromDateRange(date);
 		return contactList;
 	}
 
 	@Override
-	public List<Contact> getContactFromAddress(String city, String state) {
-		List<Contact> contactList = addressBookDBService.getContactFromAddress(city, state);
+	public List<Contacts> getContactFromAddress(String city, String state) {
+		List<Contacts> contactList = addressBookDBService.getContactFromAddress(city, state);
 		return contactList;
 	}
 
 	@Override
-	public void addContactToDataBase(String firstName, String lastName, String phoneNumber, String email,
-			int addressBookId, String type, String place, String city, String state, String zipCode) throws SQLException {
-		this.addressBookList.add(addressBookDBService.addContact(firstName, lastName, phoneNumber, email,
-			addressBookId, type, place, city, state, zipCode));
-		
+	public void addContactToDataBase(Contacts contacts, Address address, String addressBookName) throws SQLException {
+		addressBookDBList.add(addressBookDBService.addContact(contacts, address, addressBookName));
+
 	}
 
 }

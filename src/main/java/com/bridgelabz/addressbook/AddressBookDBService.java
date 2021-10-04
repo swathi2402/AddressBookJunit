@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,19 +32,21 @@ public class AddressBookDBService {
 		return connection;
 	}
 
-	private List<Contact> getContactData(ResultSet resultSet) {
-		List<Contact> addressBookList = new ArrayList<>();
+	private List<Contacts> getContactData(ResultSet resultSet) {
+		List<Contacts> addressBookList = new ArrayList<>();
 		try {
 			while (resultSet.next()) {
 				String firstName = resultSet.getString("first_name");
 				String lastName = resultSet.getString("last_name");
 				String phoneNumber = resultSet.getString("phone_number");
 				String email = resultSet.getString("email");
-				Contact contact = new Contact();
+				LocalDate dateAdded = resultSet.getDate("start").toLocalDate();
+				Contacts contact = new Contacts();
 				contact.setFirstName(firstName);
 				contact.setLastName(lastName);
 				contact.setPhoneNumber(phoneNumber);
 				contact.setEmail(email);
+				contact.setDateAdded(dateAdded);
 				addressBookList.add(contact);
 
 			}
@@ -53,8 +56,8 @@ public class AddressBookDBService {
 		return addressBookList;
 	}
 
-	private List<Contact> excecuteSqlQuery(String sql) {
-		List<Contact> contactList = null;
+	private List<Contacts> excecuteSqlQuery(String sql) {
+		List<Contacts> contactList = null;
 		try (Connection connection = this.getConnection()) {
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery(sql);
@@ -65,10 +68,10 @@ public class AddressBookDBService {
 		return contactList;
 	}
 
-	public List<Contact> readAddressBook() {
+	public List<Contacts> readAddressBook() {
 
 		String sql = "SELECT * FROM contact";
-		List<Contact> addressBookList = new ArrayList<>();
+		List<Contacts> addressBookList = new ArrayList<>();
 		try (Connection connection = this.getConnection()) {
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery(sql);
@@ -92,8 +95,8 @@ public class AddressBookDBService {
 		return result;
 	}
 
-	public List<Contact> getContactData(String name) {
-		List<Contact> addressBookList = null;
+	public List<Contacts> getContactData(String name) {
+		List<Contacts> addressBookList = null;
 		String sql = String.format("SELECT * FROM contact where first_name = '%s';", name);
 		try (Connection connection = this.getConnection()) {
 			Statement statement = connection.createStatement();
@@ -106,33 +109,40 @@ public class AddressBookDBService {
 
 	}
 
-	public List<Contact> getContactFromDateRange(String date) {
+	public List<Contacts> getContactFromDateRange(String date) {
 		String sql = String.format("SELECT * FROM contact WHERE start BETWEEN CAST('%s' AS DATE) AND DATE(NOW());",
 				date);
-		List<Contact> contactList = excecuteSqlQuery(sql);
+		List<Contacts> contactList = excecuteSqlQuery(sql);
 		return contactList;
 	}
 
-	public List<Contact> getContactFromAddress(String city, String state) {
+	public List<Contacts> getContactFromAddress(String city, String state) {
 		String sql = String.format("SELECT * FROM contact NATURAL JOIN address WHERE city = '%s' OR state = '%s';",
 				city, state);
-		List<Contact> contactList = excecuteSqlQuery(sql);
+		List<Contacts> contactList = excecuteSqlQuery(sql);
 		return contactList;
 	}
 
-	public Contact addContact(String firstName, String lastName, String phoneNumber, String email, int addressBookId,
-			String type, String place, String city, String state, String zipCode) throws SQLException {
+	public Contacts addContact(Contacts contacts, Address address, String addressBookName) throws SQLException {
 		int contactId = -1;
-		Contact contact = null;
 		Connection connection = null;
 
 		connection = this.getConnection();
 		connection.setAutoCommit(false);
 
 		try (Statement statement = connection.createStatement()) {
+			int addressBookId = 0;
+			String getId = String.format(
+					"select address_book_id from address_book_name where address_book_name = '%s';", addressBookName);
+			ResultSet result = statement.executeQuery(getId);
+			while (result.next()) {
+				addressBookId = result.getInt("address_book_id");
+			}
+			result.close();
 			String sql = String.format(
-					"INSERT INTO contact (first_name, last_name, phone_number, email, address_book_id) VALUES ('%s', '%s', '%s', '%s', '%d');",
-					firstName, lastName, phoneNumber, email, addressBookId);
+					"INSERT INTO contact (first_name, last_name, phone_number, email, start, address_book_id) VALUES ('%s', '%s', '%s', '%s', CAST('%s' AS DATE), '%d');",
+					contacts.getFirstName(), contacts.getLastName(), contacts.getPhoneNumber(), contacts.getEmail(),
+					contacts.getDateAdded(), addressBookId);
 			int rowAffected = statement.executeUpdate(sql, statement.RETURN_GENERATED_KEYS);
 			if (rowAffected == 1) {
 				ResultSet resultSet = statement.getGeneratedKeys();
@@ -149,26 +159,12 @@ public class AddressBookDBService {
 		}
 
 		try (Statement statement = connection.createStatement()) {
-			String sql = String.format("INSERT INTO type VALUES ('%d', '%s');", contactId, type);
+			String sql = String.format("INSERT INTO address VALUES ('%d', '%s', '%s', '%s', '%s');", contactId,
+					address.getPlace(), address.getCity(), address.getState(), address.getZipCode());
 			statement.executeUpdate(sql);
-		} catch (SQLException excep) {
-			excep.printStackTrace();
-			try {
-				connection.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-		}
-
-		try (Statement statement = connection.createStatement()) {
-			String sql = String.format("INSERT INTO address VALUES ('%d', '%s', '%s', '%s', '%s');", contactId, place,
-					city, state, zipCode);
-			int rowAffected = statement.executeUpdate(sql);
-			if (rowAffected == 1) {
-				contact = new Contact(firstName, lastName, place, city, state, zipCode, phoneNumber, email);
-			}
 
 			connection.commit();
+			connection.close();
 
 		} catch (SQLException exception) {
 			exception.printStackTrace();
@@ -178,7 +174,7 @@ public class AddressBookDBService {
 				e1.printStackTrace();
 			}
 		}
-		return contact;
+		return contacts;
 	}
 
 }
