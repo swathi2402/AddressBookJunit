@@ -104,7 +104,18 @@ public class AddressBookTest {
 			contactOperations.readAddressBookDBData(I0Service.DB_IO);
 			contactOperations.updateAddressBook("Abcd", "9922334455");
 		} catch (AddressBookException e) {
-			assertEquals(AddressBookException.ExceptionType.NULL, e.type);
+			assertEquals(AddressBookException.ExceptionType.NOT_EXISTS, e.type);
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	@Test
+	public void givenNameWhenEmpty_ShouldThrowError() throws AddressBookException {
+		try{
+			contactOperations.readAddressBookDBData(I0Service.DB_IO);
+			contactOperations.updateAddressBook(null, "9922334455");
+		} catch (AddressBookException e) {
+			assertEquals(AddressBookException.ExceptionType.NOT_EXISTS, e.type);
 			System.out.println(e.getMessage());
 		}
 	}

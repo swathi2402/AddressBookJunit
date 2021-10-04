@@ -186,7 +186,7 @@ public class ContactOperationsImpl implements ContactOperationsIF {
 	public void updateAddressBook(String name, String phoneNumber) throws AddressBookException {
 		int result = addressBookDBService.updateContct(name, phoneNumber);
 		if (result == 0)
-			throw new AddressBookException(AddressBookException.ExceptionType.NULL, "Such name not exists");
+			throw new AddressBookException(AddressBookException.ExceptionType.NOT_EXISTS, "Such name not exists or enterd null");
 		Contacts contact = this.getContact(name);
 		if (contact != null)
 			contact.setPhoneNumber(phoneNumber);
