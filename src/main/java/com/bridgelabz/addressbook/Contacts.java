@@ -9,9 +9,10 @@ public class Contacts {
 	private String phoneNumber;
 	private String email;
 	private LocalDate dateAdded;
-	
+	private Address address;
+
 	public Contacts() {
-		
+
 	}
 
 	public Contacts(String firstName, String lastName, String phoneNumber, String email, LocalDate dateAdded) {
@@ -21,6 +22,15 @@ public class Contacts {
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 		this.dateAdded = dateAdded;
+	}
+
+	public Contacts(String firstName, String lastName, String phoneNumber, String email, Address address) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.phoneNumber = phoneNumber;
+		this.email = email;
+		this.address = address;
 	}
 
 	public String getFirstName() {
@@ -61,6 +71,14 @@ public class Contacts {
 
 	public void setDateAdded(LocalDate dateAdded) {
 		this.dateAdded = dateAdded;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
 	@Override
