@@ -1,11 +1,16 @@
 package com.bridgelabz.addressbook;
 
+import com.opencsv.bean.CsvBindByName;
+
 public class Address {
 
+	@CsvBindByName
 	private String place;
-
+	@CsvBindByName
 	private String city;
+	@CsvBindByName
 	private String state;
+	@CsvBindByName
 	private String zipCode;
 
 	public Address(String place, String city, String state, String zipCode) {

@@ -2,13 +2,20 @@ package com.bridgelabz.addressbook;
 
 import java.time.LocalDate;
 
+import com.opencsv.bean.CsvBindByName;
+
 public class Contacts {
 
+	@CsvBindByName
 	private String firstName;
+	@CsvBindByName
 	private String lastName;
+	@CsvBindByName
 	private String phoneNumber;
+	@CsvBindByName
 	private String email;
 	private LocalDate dateAdded;
+	@CsvBindByName
 	private Address address;
 
 	public Contacts() {
